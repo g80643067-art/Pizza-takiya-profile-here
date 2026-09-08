@@ -1,0 +1,6 @@
+{
+  "name": "The Pizza Lover's",
+  "description": "The Pizza Lover's — delicious vegetarian pizza, burgers, pasta, momos, sandwiches and more in Patan, Uttar Pradesh. View our menu and order on WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --color-luxury-bg: #141311;
+  --color-luxury-surface: #1C1916;
+  --color-luxury-text: #F4EBDD;
+  --color-luxury-gold: #D8B45A;
+  --color-luxury-gold-muted: #A88945;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: #141311;
+    color: #F4EBDD;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: #F4EBDD;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Custom scrollbar and subtle gold glow utilities */
+.gold-glow {
+  box-shadow: 0 0 20px rgba(216, 180, 90, 0.22);
+}
+
+.gold-glow-lg {
+  box-shadow: 0 0 32px rgba(216, 180, 90, 0.32);
+}
+
+/* Dark luxury custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #141311;
+}
+::-webkit-scrollbar-thumb {
+  background: #2E2820;
+  border-radius: 4px;
+  border: 1px solid rgba(216, 180, 90, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D8B45A;
+}
+
+/* Hide scrollbar for carousel tracks while retaining smooth drag & wheel scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
