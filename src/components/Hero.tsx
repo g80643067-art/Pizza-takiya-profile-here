@@ -8,7 +8,7 @@ import { VegBadge } from './VegBadge';
 // Signature Showcase Visuals
 import loadedCheesePizzaImg from '../assets/images/loaded_cheese_pizza.webp';
 import paneerPizzaImg from '../assets/images/paneer_pizza_1788759992844.webp';
-import stuffedGarlicBreadImg from '../assets/images/stuffed_garlic_bread_1788759643370.webp';
+import stuffedGarlicBreadImg from '../assets/images/pizza_extra_cheese.webp';
 import realPizzaCokeImg from '../assets/images/pizza_coke_combo.webp';
 
 interface HeroProps {
