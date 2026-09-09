@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, ShoppingBag, MapPin, ArrowRight, Utensils, Sparkles } from 'lucide-react';
+import { Phone, ShoppingBag, MapPin, ArrowRight, Utensils, Sparkles, Search } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/menuData';
 
 interface NavbarProps {
@@ -46,6 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
 
   const navButtons = [
     { id: 'home', name: 'Home', href: '#home' },
+    { id: 'search', name: '🔍 Search', href: '#menu', isSearch: true },
     { id: 'menu', name: 'Menu', href: '#menu' },
     { id: 'combos', name: 'Combos', href: '#combos' },
     { id: 'about', name: 'About', href: '#about' },
@@ -54,7 +55,17 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
     { id: 'contact', name: 'Contact', href: '#contact' },
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const focusSearchInput = () => {
+    setTimeout(() => {
+      const searchInput = document.getElementById('menu-search-input') as HTMLInputElement | null;
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.select();
+      }
+    }, 350);
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isSearch?: boolean) => {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
@@ -66,6 +77,23 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
       });
       const sectionId = href.replace('#', '');
       setActiveSection(sectionId);
+      if (isSearch) {
+        focusSearchInput();
+      }
+    }
+  };
+
+  const handleSearchButtonClick = () => {
+    const target = document.querySelector('#menu');
+    if (target) {
+      const navHeight = 110;
+      const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth',
+      });
+      setActiveSection('menu');
+      focusSearchInput();
     }
   };
 
@@ -131,6 +159,18 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
 
           {/* Direct Action Buttons - Always Visible & Clearly Fitted */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Quick Search Button */}
+            <button
+              id="nav-search-btn"
+              onClick={handleSearchButtonClick}
+              className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3 sm:py-2 rounded-full bg-[#1C1916] hover:bg-[#25211D] text-[#D8B45A] border border-[#D8B45A]/40 shadow-xs transition-all cursor-pointer active:scale-95"
+              aria-label="Search Menu Items"
+              title="Search Menu"
+            >
+              <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#D8B45A]" />
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider hidden xs:inline">Search</span>
+            </button>
+
             {/* View Order Tray Button */}
             <button
               id="nav-cart-btn"
@@ -170,7 +210,7 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
                   key={btn.id}
                   id={`nav-btn-${btn.id}`}
                   href={btn.href}
-                  onClick={(e) => handleNavClick(e, btn.href)}
+                  onClick={(e) => handleNavClick(e, btn.href, btn.isSearch)}
                   className={`px-2.5 sm:px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer select-none whitespace-nowrap ${
                     isActive
                       ? 'bg-[#D8B45A] text-[#141311] shadow-[0_0_12px_rgba(216,180,90,0.35)] scale-[1.03]'

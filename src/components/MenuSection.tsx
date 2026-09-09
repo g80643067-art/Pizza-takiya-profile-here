@@ -24,19 +24,59 @@ interface MenuSectionProps {
 export const MenuSection: React.FC<MenuSectionProps> = ({ onAddToCart, onOrderNow }) => {
   const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
+
+  const query = searchQuery.trim().toLowerCase();
 
   const filteredItems = useMemo(() => {
     return MENU_ITEMS.filter((item) => {
-      const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
-      const query = searchQuery.trim().toLowerCase();
       const matchesSearch =
         query === '' ||
         item.name.toLowerCase().includes(query) ||
         item.description.toLowerCase().includes(query) ||
         item.category.toLowerCase().includes(query);
-      return matchesCategory && matchesSearch;
+
+      // If user typed a search query, search across the entire menu so they always find what they want
+      if (query !== '') {
+        return matchesSearch;
+      }
+
+      // Otherwise filter by selected category
+      return activeCategory === 'all' || item.category === activeCategory;
     });
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, query]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchInputRef.current) {
+      searchInputRef.current.blur();
+    }
+    // Scroll smoothly to results
+    const resultsEl = document.getElementById('menu-results-grid');
+    if (resultsEl) {
+      const navHeight = 120;
+      const targetPos = resultsEl.getBoundingClientRect().top + window.pageYOffset - navHeight;
+      window.scrollTo({ top: targetPos, behavior: 'smooth' });
+    }
+  };
+
+  const handleQuickSearch = (term: string) => {
+    setSearchQuery(term);
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  };
+
+  const quickSearchTags = [
+    { label: '🍕 Cheese Pizza', term: 'cheese pizza' },
+    { label: '🧀 Paneer', term: 'paneer' },
+    { label: '🍔 Burger', term: 'burger' },
+    { label: '🥖 Garlic Bread', term: 'garlic bread' },
+    { label: '🍝 Pasta', term: 'pasta' },
+    { label: '🥟 Momos', term: 'momos' },
+    { label: '🍟 Fries', term: 'fries' },
+    { label: '☕ Chai / Coffee', term: 'coffee' },
+  ];
 
   return (
     <section id="menu" className="py-20 md:py-28 bg-[#141311] text-[#F4EBDD] scroll-mt-20 border-b border-[#D8B45A]/15 overflow-hidden relative">
@@ -61,25 +101,80 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ onAddToCart, onOrderNo
 
         {/* Search Bar & Addon Information Banner */}
         <div className="max-w-2xl mx-auto mb-8 space-y-4">
-          {/* Search Bar */}
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[#D8B45A]" />
+          {/* Form Search Bar with Interactive Action Button */}
+          <form 
+            onSubmit={handleSearchSubmit} 
+            className="relative flex items-center w-full rounded-full bg-[#1C1916] border border-[#D8B45A]/35 focus-within:border-[#D8B45A] focus-within:ring-2 focus-within:ring-[#D8B45A]/20 shadow-md p-1 sm:p-1.5 transition-all"
+          >
+            <button
+              type="button"
+              onClick={() => searchInputRef.current?.focus()}
+              className="pl-3 pr-2 text-[#D8B45A] hover:text-[#C9A44B] cursor-pointer"
+              aria-label="Focus search input"
+            >
+              <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+
             <input
+              ref={searchInputRef}
+              id="menu-search-input"
               type="text"
               placeholder="Search pizzas, burgers, pasta, momos, beverages..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-10 py-3 rounded-full bg-[#1C1916] border border-[#D8B45A]/25 focus:border-[#D8B45A] focus:ring-1 focus:ring-[#D8B45A] text-[#F4EBDD] placeholder:text-[#F4EBDD]/40 text-xs sm:text-sm shadow-xs transition-all outline-none"
+              className="flex-1 bg-transparent border-none py-2 text-[#F4EBDD] placeholder:text-[#F4EBDD]/40 text-xs sm:text-sm outline-none"
             />
+
+            {/* Clear Button */}
             {searchQuery && (
               <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#F4EBDD]/50 hover:text-[#D8B45A] p-1 cursor-pointer"
+                type="button"
+                id="menu-search-clear-btn"
+                onClick={() => {
+                  setSearchQuery('');
+                  searchInputRef.current?.focus();
+                }}
+                className="text-[#F4EBDD]/50 hover:text-[#D8B45A] p-1.5 mr-1 cursor-pointer transition-colors"
                 aria-label="Clear search"
               >
                 <X className="w-4 h-4" />
               </button>
             )}
+
+            {/* Dedicated Search Action Button */}
+            <button
+              type="submit"
+              id="menu-search-submit-btn"
+              className="px-4 sm:px-5 py-2 rounded-full bg-[#D8B45A] hover:bg-[#C9A44B] text-[#141311] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
+              aria-label="Execute search"
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span className="hidden xs:inline font-black">Search</span>
+            </button>
+          </form>
+
+          {/* Quick Filter Tag Chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+            <span className="text-[10px] uppercase tracking-wider text-[#D8B45A]/80 font-bold whitespace-nowrap mr-1">
+              Quick:
+            </span>
+            {quickSearchTags.map((tag) => {
+              const isSelected = query === tag.term.toLowerCase();
+              return (
+                <button
+                  key={tag.term}
+                  type="button"
+                  onClick={() => handleQuickSearch(isSelected ? '' : tag.term)}
+                  className={`px-2.5 py-1 rounded-full text-[11px] font-medium whitespace-nowrap transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#D8B45A] text-[#141311] font-bold shadow-xs'
+                      : 'bg-[#1C1916] text-[#F4EBDD]/70 hover:text-[#D8B45A] hover:bg-[#25211D] border border-[#D8B45A]/20'
+                  }`}
+                >
+                  {tag.label}
+                </button>
+              );
+            })}
           </div>
 
           {/* Pizza Pricing & Addon Reference Banner */}
@@ -96,16 +191,20 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ onAddToCart, onOrderNo
           </div>
         </div>
 
-        {/* Category Navigation - ONE horizontal scrollable row with smooth touch/swipe scrolling */}
+        {/* Category Navigation - When not searching, show horizontal category pills */}
         <div className="w-full max-w-full overflow-hidden mb-8">
           <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto no-scrollbar flex-nowrap scroll-smooth py-1 px-1 touch-pan-x">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 id={`category-btn-${cat.id}`}
-                onClick={() => setActiveCategory(cat.id)}
+                onClick={() => {
+                  setActiveCategory(cat.id);
+                  // If user clicks a specific category, clear search query so category view works as expected
+                  if (searchQuery) setSearchQuery('');
+                }}
                 className={`whitespace-nowrap shrink-0 px-3.5 sm:px-4.5 py-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
-                  activeCategory === cat.id
+                  activeCategory === cat.id && !searchQuery
                     ? 'bg-[#D8B45A] text-[#141311] font-black shadow-[0_0_15px_rgba(216,180,90,0.35)] scale-[1.02]'
                     : 'bg-[#1C1916] hover:bg-[#25211D] text-[#F4EBDD]/75 hover:text-[#D8B45A] border border-[#D8B45A]/25'
                 }`}
@@ -118,8 +217,14 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ onAddToCart, onOrderNo
         </div>
 
         {/* Menu Items Count & Reset Filter */}
-        <div className="flex items-center justify-between mb-6 text-xs text-[#A88945] font-bold uppercase tracking-wider">
-          <span>Showing {filteredItems.length} vegetarian items</span>
+        <div id="menu-results-grid" className="flex items-center justify-between mb-6 text-xs text-[#A88945] font-bold uppercase tracking-wider">
+          <span>
+            {searchQuery ? (
+              <>Found {filteredItems.length} items matching "<span className="text-[#F4EBDD] font-black">{searchQuery}</span>"</>
+            ) : (
+              <>Showing {filteredItems.length} vegetarian items</>
+            )}
+          </span>
           {(activeCategory !== 'all' || searchQuery) && (
             <button
               onClick={() => {
