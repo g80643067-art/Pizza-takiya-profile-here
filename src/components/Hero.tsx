@@ -9,7 +9,7 @@ import { VegBadge } from './VegBadge';
 import loadedCheesePizzaImg from '../assets/images/loaded_cheese_pizza.webp';
 import paneerPizzaImg from '../assets/images/paneer_pizza_1788759992844.webp';
 import stuffedGarlicBreadImg from '../assets/images/stuffed_garlic_bread_1788759643370.webp';
-import realPizzaCokeImg from '../assets/images/real_pizza_coke_1788811139041.webp';
+import realPizzaCokeImg from '../assets/images/pizza_coke_combo.webp';
 
 interface HeroProps {
   onAddToCart: (

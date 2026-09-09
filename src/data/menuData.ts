@@ -31,7 +31,7 @@ import potatoBitesImg from '../assets/images/potato_bites_1788759737317.webp';
 import kulhadChaiImg from '../assets/images/kulhad_chai_1788759624780.webp';
 import hotCoffeeImg from '../assets/images/hot_coffee_1788760080837.webp';
 import coldCoffeeImg from '../assets/images/cold_coffee_1788760061833.webp';
-import pizzaCokeComboImg from '../assets/images/real_pizza_coke_1788811139041.webp';
+import pizzaCokeComboImg from '../assets/images/pizza_coke_combo.webp';
 import plainCheesePizzaImg from '../assets/images/plain_cheese_pizza_1788763675821.webp';
 import paneerCheeseOnlyImg from '../assets/images/paneer_cheese_only_1788808084396.webp';
 import vegSandwichNoCheeseImg from '../assets/images/veg_sandwich_no_cheese_1788808111573.webp';
