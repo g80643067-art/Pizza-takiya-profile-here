@@ -32,12 +32,22 @@ export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) =>
     };
   }, [onComplete]);
 
+  const handleDirectTransition = () => {
+    if (phase !== 'exiting') {
+      setPhase('exiting');
+      setTimeout(() => {
+        onComplete();
+      }, 350);
+    }
+  };
+
   return (
     <AnimatePresence>
       {phase !== 'exiting' ? (
         <motion.div
           id="intro-preloader"
           key="cinematic-pizza-intro"
+          onClick={handleDirectTransition}
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
@@ -45,7 +55,7 @@ export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) =>
             filter: 'blur(8px)',
             transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
           }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#0C0B0A] select-none pointer-events-auto"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#0C0B0A] select-none pointer-events-auto cursor-pointer"
         >
           {/* Deep Charcoal / Black Canvas Vignette */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,#161412_0%,#0C0B0A_70%,#060605_100%)] pointer-events-none" />

@@ -18,7 +18,7 @@ export const SocialSection: React.FC = () => {
     },
     {
       name: 'WhatsApp Community',
-      handle: '+91 73551 28397',
+      handle: '+91 93697 22736',
       description: 'Get instant secret daily discount coupons, quick takeaway ordering, and direct access to counter specials.',
       icon: <MessageCircle className="w-6 h-6 text-emerald-400" />,
       actionText: 'Join WhatsApp VIP Circle',

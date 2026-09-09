@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, MapPin, Clock, Send, MessageCircle, CheckCircle, Cake, Sparkles } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/menuData';
-import { WHATSAPP_NUMBER } from '../utils/whatsapp';
+import { WHATSAPP_NUMBER, openWhatsAppUrl } from '../utils/whatsapp';
 
 export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -16,10 +16,10 @@ export const ContactSection: React.FC = () => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.phone.trim()) return;
 
-    const text = `Hi The Pizza Lover's! I am contacting you from your website:\n\nName: ${formData.name}\nPhone: ${formData.phone}\nType: ${formData.inquiryType}\nMessage/Order: ${formData.message || 'I would like to inquire about ordering delicious pizza.'}`;
+    const text = `Hi The Pizza Lover's! I am contacting you from your website:\n\nName: ${formData.name.trim()}\nPhone: ${formData.phone.trim()}\nType: ${formData.inquiryType}\nMessage/Order: ${formData.message.trim() || 'I would like to inquire about ordering delicious pizza.'}`;
     
     // Open WhatsApp with prefilled message
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank');
+    openWhatsAppUrl(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`);
 
     setSubmitted(true);
     setTimeout(() => {

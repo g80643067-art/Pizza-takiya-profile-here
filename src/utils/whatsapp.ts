@@ -109,3 +109,17 @@ export function getCartWhatsAppUrl(
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
+
+export function openWhatsAppUrl(url: string): void {
+  try {
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+}

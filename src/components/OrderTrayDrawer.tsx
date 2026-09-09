@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Trash2, Plus, Minus, MessageCircle, ShoppingBag, MapPin, Phone, User, AlertCircle, Sparkles } from 'lucide-react';
 import { CartItem } from '../types';
-import { getCartWhatsAppUrl } from '../utils/whatsapp';
+import { getCartWhatsAppUrl, openWhatsAppUrl } from '../utils/whatsapp';
 
 interface OrderTrayDrawerProps {
   isOpen: boolean;
@@ -111,7 +111,7 @@ export const OrderTrayDrawer: React.FC<OrderTrayDrawerProps> = ({
       deliveryAddress: orderType === 'delivery' ? deliveryAddress.trim() : undefined,
       notes: specialNotes.trim(),
     });
-    window.open(url, '_blank');
+    openWhatsAppUrl(url);
   };
 
   return (
