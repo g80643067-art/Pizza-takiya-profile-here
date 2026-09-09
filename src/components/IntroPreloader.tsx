@@ -41,13 +41,6 @@ export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) =>
     };
   }, [onComplete]);
 
-  const handleSkip = () => {
-    setPhase('exiting');
-    setTimeout(() => {
-      onComplete();
-    }, 350);
-  };
-
   // Cheese pull calculations during separation phase (2.1s - 3.2s)
   const isCheeseStretching = Number.isFinite(elapsedSec) && elapsedSec >= 2.1 && elapsedSec <= 3.2;
   const rawProgress = (elapsedSec - 2.1) / 1.1;
@@ -87,15 +80,6 @@ export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) =>
             transition={{ duration: 4.8, ease: 'easeOut' }}
             className="absolute w-[440px] h-[440px] sm:w-[560px] sm:h-[560px] rounded-full bg-gradient-to-tr from-[#A88945]/20 via-[#D8B45A]/30 to-transparent blur-3xl pointer-events-none"
           />
-
-          {/* Skip Button */}
-          <button
-            onClick={handleSkip}
-            className="absolute top-6 right-6 z-40 px-4 py-1.5 rounded-full bg-[#1C1916]/80 hover:bg-[#25211D] border border-[#D8B45A]/40 text-[#D8B45A] hover:text-[#F4EBDD] text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer backdrop-blur-md shadow-lg active:scale-95"
-            aria-label="Skip intro"
-          >
-            Skip Intro ✕
-          </button>
 
           {/* Pizzeria Header Badge */}
           <motion.div
