@@ -1,16 +1,313 @@
-import React from 'react';
-import { UtensilsCrossed, MessageCircle, Heart, ArrowRight, Sparkles, ShieldCheck, Flame, Star } from 'lucide-react';
-import { RESTAURANT_INFO } from '../data/menuData';
-import { getGeneralWhatsAppUrl } from '../utils/whatsapp';
+import React, { useState } from 'react';
+import { UtensilsCrossed, MessageCircle, Heart, ArrowRight, Sparkles, ShieldCheck, Flame, Plus, Check, ShoppingBag } from 'lucide-react';
+import { MenuItem } from '../types';
+import { ADDON_PRICES, LOADED_PIZZA_SIZES } from '../data/menuData';
+import { getGeneralWhatsAppUrl, getSingleItemWhatsAppUrl } from '../utils/whatsapp';
 import { VegBadge } from './VegBadge';
 
 // Signature Showcase Visuals
-import loadedCheesePizzaImg from '../assets/images/loaded_cheese_pizza.jpg';
-import paneerPizzaImg from '../assets/images/paneer_pizza_1788759992844.jpg';
-import stuffedGarlicBreadImg from '../assets/images/stuffed_garlic_bread_1788759643370.jpg';
-import realPizzaCokeImg from '../assets/images/real_pizza_coke_1788811139041.jpg';
+import loadedCheesePizzaImg from '../assets/images/loaded_cheese_pizza.webp';
+import paneerPizzaImg from '../assets/images/paneer_pizza_1788759992844.webp';
+import stuffedGarlicBreadImg from '../assets/images/stuffed_garlic_bread_1788759643370.webp';
+import realPizzaCokeImg from '../assets/images/real_pizza_coke_1788811139041.webp';
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+  onAddToCart: (
+    item: MenuItem,
+    size?: 'Small' | 'Medium' | 'Large',
+    extraCheese?: boolean,
+    extraTopping?: boolean,
+    price?: number
+  ) => void;
+  onOrderNow?: (
+    item: MenuItem,
+    size?: 'Small' | 'Medium' | 'Large',
+    extraCheese?: boolean,
+    extraTopping?: boolean,
+    price?: number
+  ) => void;
+}
+
+interface HeroShowcaseItem extends MenuItem {
+  heroTag: string;
+  heroCategory: string;
+}
+
+const HERO_SHOWCASE_ITEMS: HeroShowcaseItem[] = [
+  {
+    id: 'sp-loaded-cheese',
+    name: 'Loaded Cheese Pizza',
+    heroCategory: 'Artisanal Pizza',
+    category: 'special-pizza',
+    description: 'Double stretchy mozzarella, golden herb crust, and secret spiced tomato sauce.',
+    price: 135,
+    sizes: LOADED_PIZZA_SIZES,
+    hasCustomAddons: true,
+    isPopular: true,
+    heroTag: "Chef's Signature",
+    tag: "Chef's Signature",
+    image: loadedCheesePizzaImg,
+  },
+  {
+    id: 'combo-2',
+    name: 'Medium Pizza + 2 Coke',
+    heroCategory: 'Super Saver Combo',
+    category: 'combos',
+    description: 'Hand-tossed medium pizza served bubbling hot with two chilled fizzy Cokes.',
+    price: 209,
+    isPopular: true,
+    isBestDeal: true,
+    heroTag: 'Best Deal',
+    tag: 'Best Deal',
+    image: realPizzaCokeImg,
+  },
+  {
+    id: 'sp-masala-paneer',
+    name: 'Tandoori Paneer Pizza',
+    heroCategory: 'Desi Fusion',
+    category: 'special-pizza',
+    description: 'Marinated cottage cheese cubes, charred onions, crisp capsicum and rich cheese.',
+    price: 135,
+    sizes: LOADED_PIZZA_SIZES,
+    hasCustomAddons: true,
+    isPopular: true,
+    heroTag: 'Trending',
+    tag: 'Trending',
+    image: paneerPizzaImg,
+  },
+  {
+    id: 'ot-stuffed-garlic-bread',
+    name: 'Stuffed Garlic Bread',
+    heroCategory: 'Italian Sides',
+    category: 'pasta-garlic-bread',
+    description: 'Golden-brown artisan crust stuffed with melted cheese, sweet corn, and herbs.',
+    price: 69,
+    isPopular: true,
+    heroTag: 'Crispy & Cheesy',
+    tag: 'Crispy & Cheesy',
+    image: stuffedGarlicBreadImg,
+  },
+];
+
+interface HeroCardItemProps {
+  item: HeroShowcaseItem;
+  onAddToCart: (
+    item: MenuItem,
+    size?: 'Small' | 'Medium' | 'Large',
+    extraCheese?: boolean,
+    extraTopping?: boolean,
+    price?: number
+  ) => void;
+  onOrderNow?: (
+    item: MenuItem,
+    size?: 'Small' | 'Medium' | 'Large',
+    extraCheese?: boolean,
+    extraTopping?: boolean,
+    price?: number
+  ) => void;
+}
+
+const HeroCardItemComponent: React.FC<HeroCardItemProps> = ({ item, onAddToCart, onOrderNow }) => {
+  const hasSizes = Boolean(item.sizes && item.sizes.length > 0);
+  const [selectedSize, setSelectedSize] = useState<'Small' | 'Medium' | 'Large'>('Small');
+  const [extraCheese, setExtraCheese] = useState(false);
+  const [extraTopping, setExtraTopping] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
+
+  // Dynamic price calculation
+  let currentPrice = item.price;
+  if (hasSizes && item.sizes) {
+    const foundSize = item.sizes.find((s) => s.name === selectedSize);
+    if (foundSize) {
+      currentPrice = foundSize.price;
+    }
+  }
+
+  if (item.hasCustomAddons) {
+    if (extraCheese) {
+      currentPrice += ADDON_PRICES.extraCheese[selectedSize];
+    }
+    if (extraTopping) {
+      currentPrice += ADDON_PRICES.extraTopping[selectedSize];
+    }
+  }
+
+  const handleAdd = () => {
+    onAddToCart(
+      item,
+      hasSizes ? selectedSize : undefined,
+      extraCheese,
+      extraTopping,
+      currentPrice
+    );
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1400);
+  };
+
+  const handleOrder = () => {
+    if (onOrderNow) {
+      onOrderNow(
+        item,
+        hasSizes ? selectedSize : undefined,
+        extraCheese,
+        extraTopping,
+        currentPrice
+      );
+    } else {
+      handleAdd();
+    }
+  };
+
+  return (
+    <div className="relative flex flex-col bg-[#1C1916]/95 backdrop-blur-md rounded-3xl overflow-hidden border border-[#D8B45A]/25 hover:border-[#D8B45A] shadow-xl hover:shadow-[0_16px_40px_rgba(216,180,90,0.18)] transition-all duration-300 group">
+      {/* Top Tag & Price */}
+      <div className="absolute top-3.5 left-3.5 z-10 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D8B45A] text-[#141311] text-[9px] font-black uppercase tracking-widest shadow-md">
+        <Sparkles className="w-3 h-3 text-[#141311]" />
+        <span>{item.heroTag}</span>
+      </div>
+
+      <div className="absolute top-3.5 right-3.5 z-10 flex items-center gap-2">
+        <div className="bg-[#141311]/90 backdrop-blur-md p-1.5 rounded-lg shadow-sm border border-[#D8B45A]/30">
+          <VegBadge size="sm" />
+        </div>
+        <div className="bg-[#141311]/90 backdrop-blur-md px-3 py-1 rounded-full border border-[#D8B45A]/30 text-xs text-[#D8B45A] font-black font-display shadow-md">
+          <span>₹{currentPrice}</span>
+        </div>
+      </div>
+
+      {/* Image */}
+      <div className="relative h-48 sm:h-52 overflow-hidden bg-[#141311]">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+          referrerPolicy="no-referrer"
+          loading="eager"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1916] via-[#1C1916]/20 to-transparent" />
+
+        {/* Dynamic Price on Image */}
+        <div className="absolute bottom-2.5 left-3 px-3 py-1 rounded-full bg-[#141311]/90 text-white backdrop-blur-sm border border-[#D8B45A]/35 shadow-sm">
+          <span className="text-[9px] text-[#D8B45A] font-bold block uppercase tracking-widest leading-none">
+            {hasSizes ? `${selectedSize}` : 'Price'}
+          </span>
+          <span className="text-base font-black text-[#F4EBDD] font-display leading-tight">₹{currentPrice}</span>
+        </div>
+      </div>
+
+      {/* Card Details */}
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+        <div className="space-y-1">
+          <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#D8B45A] block">
+            {item.heroCategory}
+          </span>
+          <h3 className="text-base sm:text-lg font-black text-[#F4EBDD] group-hover:text-[#D8B45A] font-display transition-colors tracking-tight line-clamp-1">
+            {item.name}
+          </h3>
+          <p className="text-[#F4EBDD]/65 text-xs leading-relaxed line-clamp-2">
+            {item.description}
+          </p>
+        </div>
+
+        {/* Size Selection Pill Buttons (For Pizzas) */}
+        {hasSizes && item.sizes && (
+          <div className="space-y-1 pt-1">
+            <div className="flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-[#A88945]">
+              <span>Size:</span>
+              <span className="text-[#F4EBDD]/50 font-medium">S: 7" | M: 10" | L: 12"</span>
+            </div>
+            <div className="grid grid-cols-3 gap-1 p-1 bg-[#141311] rounded-full border border-[#D8B45A]/20">
+              {item.sizes.map((s) => (
+                <button
+                  key={s.code}
+                  type="button"
+                  onClick={() => setSelectedSize(s.name)}
+                  className={`py-1 px-1.5 rounded-full text-[11px] font-bold transition-all text-center cursor-pointer ${
+                    selectedSize === s.name
+                      ? 'bg-[#D8B45A] text-[#141311] shadow-xs'
+                      : 'text-[#F4EBDD]/70 hover:text-[#D8B45A] hover:bg-[#D8B45A]/10'
+                  }`}
+                >
+                  {s.name[0]} · ₹{s.price}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Custom Addons Toggle (Extra Cheese, Extra Toppings) */}
+        {item.hasCustomAddons && (
+          <div className="p-2 rounded-xl bg-[#141311] border border-[#D8B45A]/20 space-y-1 text-xs">
+            <div className="flex items-center justify-between gap-2 text-[10px]">
+              <label className="flex items-center gap-1.5 cursor-pointer select-none text-[#F4EBDD]/75 hover:text-[#D8B45A]">
+                <input
+                  type="checkbox"
+                  checked={extraCheese}
+                  onChange={(e) => setExtraCheese(e.target.checked)}
+                  className="rounded border-[#D8B45A]/40 text-[#D8B45A] focus:ring-[#D8B45A] w-3 h-3 accent-[#D8B45A]"
+                />
+                <span>Cheese (+₹{ADDON_PRICES.extraCheese[selectedSize]})</span>
+              </label>
+
+              <label className="flex items-center gap-1.5 cursor-pointer select-none text-[#F4EBDD]/75 hover:text-[#D8B45A]">
+                <input
+                  type="checkbox"
+                  checked={extraTopping}
+                  onChange={(e) => setExtraTopping(e.target.checked)}
+                  className="rounded border-[#D8B45A]/40 text-[#D8B45A] focus:ring-[#D8B45A] w-3 h-3 accent-[#D8B45A]"
+                />
+                <span>Topping (+₹{ADDON_PRICES.extraTopping[selectedSize]})</span>
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons: Working "ADD TO CART" & WhatsApp */}
+        <div className="pt-2 flex items-center gap-2">
+          {/* Working ADD TO CART button */}
+          <button
+            type="button"
+            onClick={handleAdd}
+            className={`flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full text-[11px] font-black uppercase tracking-wider transition-all cursor-pointer shadow-sm active:scale-95 whitespace-nowrap ${
+              justAdded
+                ? 'bg-emerald-500 text-[#141311] shadow-[0_0_15px_rgba(16,185,129,0.35)]'
+                : 'bg-[#D8B45A] hover:bg-[#C9A44B] text-[#141311] shadow-[0_0_15px_rgba(216,180,90,0.25)] hover:shadow-[0_0_20px_rgba(216,180,90,0.4)]'
+            }`}
+            title="Add to order tray"
+          >
+            {justAdded ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-[#141311] shrink-0 stroke-[3]" />
+                <span>Added to Tray</span>
+              </>
+            ) : (
+              <>
+                <Plus className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
+                <span>ADD TO CART</span>
+              </>
+            )}
+          </button>
+
+          {/* Individual Order Button (opens Order Tray with configured item) */}
+          <button
+            type="button"
+            onClick={handleOrder}
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full border border-[#D8B45A]/40 text-[#D8B45A] hover:bg-[#D8B45A] hover:text-[#141311] transition-all text-[11px] font-bold uppercase tracking-wider shadow-xs cursor-pointer active:scale-95 shrink-0"
+            title="Configure and order in Order Tray"
+          >
+            <ShoppingBag className="w-3.5 h-3.5 text-current shrink-0" />
+            <span className="hidden sm:inline">Order</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const HeroCardItem = React.memo(HeroCardItemComponent);
+
+export const Hero: React.FC<HeroProps> = ({ onAddToCart, onOrderNow }) => {
   const scrollToMenu = () => {
     const menuSection = document.getElementById('menu');
     if (menuSection) {
@@ -77,97 +374,15 @@ export const Hero: React.FC = () => {
 
         </div>
 
-        {/* Hero 4-Column Showcase Grid */}
+        {/* Hero 4-Column Showcase Grid with Complete Purchasing Functionality */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-          {[
-            {
-              id: 'hero-card-1',
-              title: 'Loaded Cheese Pizza',
-              category: 'Artisanal Pizza',
-              price: '₹135',
-              tag: "Chef's Signature",
-              image: loadedCheesePizzaImg,
-              desc: 'Double stretchy mozzarella, golden herb crust, and secret spiced tomato sauce.',
-            },
-            {
-              id: 'hero-card-2',
-              title: 'Medium Pizza + 2 Coke',
-              category: 'Super Saver Combo',
-              price: '₹209',
-              tag: 'Best Deal',
-              image: realPizzaCokeImg,
-              desc: 'Hand-tossed medium pizza served bubbling hot with two chilled fizzy Cokes.',
-            },
-            {
-              id: 'hero-card-3',
-              title: 'Tandoori Paneer Pizza',
-              category: 'Desi Fusion',
-              price: '₹135',
-              tag: 'Trending',
-              image: paneerPizzaImg,
-              desc: 'Marinated cottage cheese cubes, charred onions, crisp capsicum and rich cheese.',
-            },
-            {
-              id: 'hero-card-4',
-              title: 'Stuffed Garlic Bread',
-              category: 'Italian Sides',
-              price: '₹69',
-              tag: 'Crispy & Cheesy',
-              image: stuffedGarlicBreadImg,
-              desc: 'Golden-brown artisan crust stuffed with melted cheese, sweet corn, and herbs.',
-            },
-          ].map((item) => (
-            <div
+          {HERO_SHOWCASE_ITEMS.map((item) => (
+            <HeroCardItem
               key={item.id}
-              className="relative flex flex-col bg-[#1C1916]/95 backdrop-blur-md rounded-3xl overflow-hidden border border-[#D8B45A]/25 hover:border-[#D8B45A] shadow-xl hover:shadow-[0_16px_40px_rgba(216,180,90,0.18)] transition-all duration-300 group"
-            >
-              {/* Top Tag & Price */}
-              <div className="absolute top-3.5 left-3.5 z-10 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D8B45A] text-[#141311] text-[9px] font-bold uppercase tracking-widest shadow-md">
-                <Sparkles className="w-3 h-3 text-[#141311]" />
-                <span>{item.tag}</span>
-              </div>
-
-              <div className="absolute top-3.5 right-3.5 z-10 bg-[#141311]/90 backdrop-blur-md px-3 py-1 rounded-full border border-[#D8B45A]/30 text-xs text-[#D8B45A] font-black">
-                <span>{item.price}</span>
-              </div>
-
-              {/* Image */}
-              <div className="relative h-56 overflow-hidden bg-[#141311]">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-                  referrerPolicy="no-referrer"
-                  loading="eager"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1C1916] via-[#1C1916]/20 to-transparent" />
-              </div>
-
-              {/* Card Details */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#D8B45A] block">
-                    {item.category}
-                  </span>
-                  <h3 className="text-lg font-black text-[#F4EBDD] group-hover:text-[#D8B45A] font-display transition-colors tracking-tight">
-                    {item.title}
-                  </h3>
-                  <p className="text-[#F4EBDD]/65 text-xs leading-relaxed line-clamp-2">
-                    {item.desc}
-                  </p>
-                </div>
-
-                <div className="pt-2.5 flex items-center justify-between border-t border-[#D8B45A]/15 text-[10px]">
-                  <span className="text-[#D8B45A] font-bold uppercase tracking-wider flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    Fresh Handcrafted
-                  </span>
-                  <span className="text-emerald-400 font-bold uppercase tracking-wider">
-                    Pure Veg
-                  </span>
-                </div>
-              </div>
-            </div>
+              item={item}
+              onAddToCart={onAddToCart}
+              onOrderNow={onOrderNow}
+            />
           ))}
         </div>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MapPin, Clock, MessageCircle, Heart, ArrowUp, Navigation } from 'lucide-react';
+import { Phone, MapPin, Clock, MessageCircle, Heart, ArrowUp, Navigation, Instagram, Facebook } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/menuData';
 import { getGeneralWhatsAppUrl } from '../utils/whatsapp';
 import { VegBadge } from './VegBadge';
@@ -69,6 +69,28 @@ export const Footer: React.FC = () => {
               >
                 <MessageCircle className="w-3.5 h-3.5 text-[#141311]" />
                 <span>WhatsApp Order</span>
+              </a>
+
+              <a
+                href={RESTAURANT_INFO.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram Profile"
+                title="Follow @the_pizza_lovers_ on Instagram"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#1C1916] hover:bg-[#D8B45A] text-[#D8B45A] hover:text-[#141311] border border-[#D8B45A]/30 transition-all cursor-pointer shadow-xs active:scale-95"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+
+              <a
+                href={RESTAURANT_INFO.facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook Profile"
+                title="Visit The Pizza Lover's on Facebook"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#1C1916] hover:bg-[#D8B45A] text-[#D8B45A] hover:text-[#141311] border border-[#D8B45A]/30 transition-all cursor-pointer shadow-xs active:scale-95"
+              >
+                <Facebook className="w-4 h-4" />
               </a>
             </div>
           </div>

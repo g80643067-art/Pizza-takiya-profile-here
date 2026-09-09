@@ -22,10 +22,10 @@ export const VegBadge: React.FC<VegBadgeProps> = ({ className = '', size = 'md',
   return (
     <div className={`inline-flex items-center gap-1.5 ${className}`}>
       <div 
-        className={`border border-emerald-500/80 rounded-[3px] bg-[#1C1916] flex items-center justify-center ${boxSizes[size]}`}
+        className={`border border-emerald-500/80 bg-[#1C1916] flex items-center justify-center ${boxSizes[size]}`}
         title="100% Vegetarian"
       >
-        <div className={`rounded-full bg-emerald-500 ${dotSizes[size]}`} />
+        <div className={`bg-emerald-500 ${dotSizes[size]}`} />
       </div>
       {showLabel && (
         <span className="text-xs font-semibold text-emerald-400 tracking-wide">

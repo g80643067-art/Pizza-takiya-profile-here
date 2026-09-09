@@ -5,10 +5,17 @@ export const BackToTop: React.FC = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setVisible(window.scrollY > 400);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setVisible(window.scrollY > 400);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -25,7 +32,7 @@ export const BackToTop: React.FC = () => {
     <button
       id="back-to-top-btn"
       onClick={scrollToTop}
-      className="fixed bottom-5 left-5 z-40 p-3 rounded-full bg-[#1C1916] hover:bg-[#D8B45A] text-[#D8B45A] hover:text-[#141311] shadow-xl border border-[#D8B45A]/40 hover:border-[#D8B45A] transition-all hover:scale-110 active:scale-95 cursor-pointer"
+      className="fixed bottom-5 right-5 z-40 p-3 rounded-full bg-[#1C1916] hover:bg-[#D8B45A] text-[#D8B45A] hover:text-[#141311] shadow-xl border border-[#D8B45A]/40 hover:border-[#D8B45A] transition-all hover:scale-110 active:scale-95 cursor-pointer"
       aria-label="Back to top"
       title="Scroll back to top"
     >

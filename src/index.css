@@ -10,8 +10,23 @@
   --color-luxury-gold-muted: #A88945;
 }
 
+/* Set border-radius: 0 only on regular UI elements (cards, buttons, containers, inputs, image cards, sections, badges).
+   The intro-page pizza cutter/knife and preloader retain their exact original curves and circular shapes. */
+body :not(#intro-preloader, #intro-preloader *, .pizza-cutter, .pizza-cutter *) {
+  border-radius: 0px !important;
+}
+
+#intro-preloader,
+#intro-preloader *,
+.pizza-cutter,
+.pizza-cutter * {
+  border-radius: revert;
+}
+
 @layer base {
-  body {
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
     font-family: var(--font-sans);
     background-color: #141311;
     color: #F4EBDD;
@@ -23,7 +38,7 @@
   }
 }
 
-/* Custom scrollbar and subtle gold glow utilities */
+/* Custom subtle gold glow utilities */
 .gold-glow {
   box-shadow: 0 0 20px rgba(216, 180, 90, 0.22);
 }
@@ -35,25 +50,28 @@
 /* Dark luxury custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #141311;
 }
 ::-webkit-scrollbar-thumb {
   background: #2E2820;
-  border-radius: 4px;
+  border-radius: 0px !important;
   border: 1px solid rgba(216, 180, 90, 0.2);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #D8B45A;
 }
 
-/* Hide scrollbar for carousel tracks while retaining smooth drag & wheel scrolling */
+/* Hide scrollbar for carousel/category tracks while retaining smooth drag, touch & swipe scrolling */
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 

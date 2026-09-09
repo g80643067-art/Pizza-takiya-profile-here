@@ -1,15 +1,15 @@
 import React from 'react';
-import { Flame, Sparkles, MessageCircle, Plus, Check } from 'lucide-react';
+import { Flame, Sparkles, MessageCircle, Plus, Check, ShoppingBag } from 'lucide-react';
 import { MenuItem } from '../types';
 import { MENU_ITEMS } from '../data/menuData';
-import { getSingleItemWhatsAppUrl } from '../utils/whatsapp';
 import { VegBadge } from './VegBadge';
 
 interface CombosSectionProps {
   onAddToCart: (item: MenuItem, size?: 'Small' | 'Medium' | 'Large', extraCheese?: boolean, extraTopping?: boolean, price?: number) => void;
+  onOrderNow?: (item: MenuItem, size?: 'Small' | 'Medium' | 'Large', extraCheese?: boolean, extraTopping?: boolean, price?: number) => void;
 }
 
-export const CombosSection: React.FC<CombosSectionProps> = ({ onAddToCart }) => {
+export const CombosSection: React.FC<CombosSectionProps> = ({ onAddToCart, onOrderNow }) => {
   const comboItems = MENU_ITEMS.filter((item) => item.category === 'combos');
   const [addedItem, setAddedItem] = React.useState<string | null>(null);
 
@@ -17,6 +17,14 @@ export const CombosSection: React.FC<CombosSectionProps> = ({ onAddToCart }) => 
     onAddToCart(item, undefined, false, false, item.price);
     setAddedItem(item.id);
     setTimeout(() => setAddedItem(null), 1500);
+  };
+
+  const handleOrder = (combo: MenuItem) => {
+    if (onOrderNow) {
+      onOrderNow(combo, undefined, false, false, combo.price);
+    } else {
+      handleAdd(combo);
+    }
   };
 
   return (
@@ -41,7 +49,7 @@ export const CombosSection: React.FC<CombosSectionProps> = ({ onAddToCart }) => 
         </div>
 
         {/* Responsive Grid of Combos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {comboItems.map((combo) => (
             <div
               key={combo.id}
@@ -89,30 +97,34 @@ export const CombosSection: React.FC<CombosSectionProps> = ({ onAddToCart }) => 
 
                 {/* Buttons - Clearly Fitted */}
                 <div className="pt-3 flex items-center gap-2 sm:gap-2.5">
-                  <a
-                    href={getSingleItemWhatsAppUrl(combo, undefined, false, false, combo.price)}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => handleOrder(combo)}
                     className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 sm:py-3 px-3.5 sm:px-5 rounded-full border border-[#D8B45A]/40 text-[#D8B45A] hover:bg-[#D8B45A] hover:text-[#141311] hover:shadow-[0_0_20px_rgba(216,180,90,0.3)] transition-all text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-xs cursor-pointer active:scale-95 whitespace-nowrap"
+                    title="Order combo in Order Tray"
                   >
-                    <MessageCircle className="w-4 h-4 text-current shrink-0" />
+                    <ShoppingBag className="w-4 h-4 text-current shrink-0" />
                     <span>Order Combo</span>
-                  </a>
+                  </button>
 
                   <button
                     onClick={() => handleAdd(combo)}
-                    className="inline-flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-3 sm:px-4 rounded-full border border-[#D8B45A]/40 bg-[#141311] hover:bg-[#D8B45A] text-[#D8B45A] hover:text-[#141311] transition-all text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-xs cursor-pointer active:scale-95 whitespace-nowrap shrink-0"
+                    className={`inline-flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-3.5 sm:px-4 rounded-full border transition-all text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-xs cursor-pointer active:scale-95 whitespace-nowrap shrink-0 ${
+                      addedItem === combo.id
+                        ? 'bg-emerald-500 text-[#141311] border-emerald-500'
+                        : 'border-[#D8B45A]/40 bg-[#141311] hover:bg-[#D8B45A] text-[#D8B45A] hover:text-[#141311]'
+                    }`}
                     title="Add combo to order tray"
                   >
                     {addedItem === combo.id ? (
                       <>
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                        <span className="text-emerald-400">Added</span>
+                        <Check className="w-3.5 h-3.5 text-[#141311] shrink-0 stroke-[3]" />
+                        <span>Added</span>
                       </>
                     ) : (
                       <>
                         <Plus className="w-3.5 h-3.5 shrink-0" />
-                        <span>Add</span>
+                        <span>ADD TO CART</span>
                       </>
                     )}
                   </button>

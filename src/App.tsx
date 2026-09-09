@@ -53,6 +53,17 @@ export default function App() {
     });
   };
 
+  const handleOrderNow = (
+    item: MenuItem,
+    size?: 'Small' | 'Medium' | 'Large',
+    extraCheese?: boolean,
+    extraTopping?: boolean,
+    price?: number
+  ) => {
+    handleAddToCart(item, size, extraCheese, extraTopping, price);
+    setIsCartOpen(true);
+  };
+
   const handleUpdateQuantity = (id: string, delta: number) => {
     setCartItems((prev) =>
       prev
@@ -91,9 +102,9 @@ export default function App() {
 
       {/* Main Content Sections */}
       <main className="flex-grow">
-        <Hero />
-        <CombosSection onAddToCart={handleAddToCart} />
-        <MenuSection onAddToCart={handleAddToCart} />
+        <Hero onAddToCart={handleAddToCart} onOrderNow={handleOrderNow} />
+        <CombosSection onAddToCart={handleAddToCart} onOrderNow={handleOrderNow} />
+        <MenuSection onAddToCart={handleAddToCart} onOrderNow={handleOrderNow} />
         <AboutSection />
         <ReviewsSection />
         <LocationSection />

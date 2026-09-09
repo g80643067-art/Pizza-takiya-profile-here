@@ -6,6 +6,21 @@ import {defineConfig} from 'vite';
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss()],
+    build: {
+      target: 'esnext',
+      minify: 'esbuild' as const,
+      cssMinify: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom'],
+            'vendor-motion': ['motion/react'],
+            'vendor-icons': ['lucide-react'],
+          },
+        },
+      },
+      chunkSizeWarningLimit: 1000,
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

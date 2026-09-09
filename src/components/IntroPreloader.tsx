@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, Heart } from 'lucide-react';
+import topDownPizzaImg from '../assets/images/intro_top_down_pizza.webp';
 
 interface IntroPreloaderProps {
   onComplete: () => void;
@@ -8,17 +9,8 @@ interface IntroPreloaderProps {
 
 export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) => {
   const [phase, setPhase] = useState<'playing' | 'exiting'>('playing');
-  const [elapsedSec, setElapsedSec] = useState<number>(0);
-
-  // High-resolution artisanal pizza image with bubbly melted mozzarella and roasted herbs
-  const PIZZA_IMAGE_URL = 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=85';
 
   useEffect(() => {
-    // Tick elapsed timer for dynamic cheese stretch physics
-    const interval = setInterval(() => {
-      setElapsedSec((prev) => +(prev + 0.05).toFixed(2));
-    }, 50);
-
     // Sequence timing:
     // 0.0s - 1.2s: Whole pizza appears from darkness + warm steam rises
     // 1.2s - 2.2s: Pizza cutter enters, rolls & cuts through the pizza
@@ -35,28 +27,16 @@ export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) =>
     }, 5350);
 
     return () => {
-      clearInterval(interval);
       clearTimeout(exitTimer);
       clearTimeout(completeTimer);
     };
   }, [onComplete]);
 
-  // Cheese pull calculations during separation phase (2.1s - 3.2s)
-  const isCheeseStretching = Number.isFinite(elapsedSec) && elapsedSec >= 2.1 && elapsedSec <= 3.2;
-  const rawProgress = (elapsedSec - 2.1) / 1.1;
-  const cheeseProgress = Number.isFinite(rawProgress) ? Math.min(1, Math.max(0, rawProgress)) : 0;
-  const rawOpacity = 1 - cheeseProgress * 1.1;
-  const cheeseOpacity = isCheeseStretching && Number.isFinite(rawOpacity) ? Math.max(0, Math.min(1, rawOpacity)) : 0;
-  const cheeseWidth = Math.max(0.5, 3.2 * (1 - cheeseProgress * 0.8));
-
-  // Offset of the separating slice during the pull
-  const slicePullX = cheeseProgress * 32;
-  const slicePullY = -cheeseProgress * 28;
-
   return (
     <AnimatePresence>
       {phase !== 'exiting' ? (
         <motion.div
+          id="intro-preloader"
           key="cinematic-pizza-intro"
           initial={{ opacity: 1 }}
           exit={{
@@ -126,7 +106,7 @@ export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) =>
                   height="400"
                 >
                   <image
-                    href={PIZZA_IMAGE_URL}
+                    href={topDownPizzaImg}
                     x="60"
                     y="60"
                     width="280"
@@ -215,43 +195,51 @@ export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) =>
                 style={{ filter: 'drop-shadow(0 0 6px #D8B45A)' }}
               />
 
-              {/* 4. Cheese Stretch Strands (Phase 3: 2.1s - 3.2s) */}
-              {isCheeseStretching && (
-                <g style={{ opacity: cheeseOpacity }}>
-                  {/* Center Apex Stretch */}
-                  <path
-                    d={`M 200 200 Q ${200 + slicePullX * 0.4} ${200 + slicePullY * 0.4 + 7} ${200 + slicePullX} ${200 + slicePullY}`}
-                    fill="none"
-                    stroke="#F5CE6C"
-                    strokeWidth={cheeseWidth * 1.2}
-                    strokeLinecap="round"
-                    style={{ filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.5))' }}
-                  />
-                  {/* Left Edge Stretch 1 */}
-                  <path
-                    d={`M 218 132 Q ${218 + slicePullX * 0.45} ${132 + slicePullY * 0.45 + 5} ${218 + slicePullX} ${132 + slicePullY}`}
-                    fill="none"
-                    stroke="#FFF2C6"
-                    strokeWidth={cheeseWidth}
-                    strokeLinecap="round"
-                  />
-                  {/* Right Edge Stretch 2 */}
-                  <path
-                    d={`M 268 182 Q ${268 + slicePullX * 0.45} ${182 + slicePullY * 0.45 + 6} ${268 + slicePullX} ${182 + slicePullY}`}
-                    fill="none"
-                    stroke="#E5A93C"
-                    strokeWidth={cheeseWidth * 0.9}
-                    strokeLinecap="round"
-                  />
-                  {/* Fine Molten Droplet */}
-                  <circle
-                    cx={200 + slicePullX * 0.5}
-                    cy={200 + slicePullY * 0.5 + 4}
-                    r={Math.max(0.8, 2 * (1 - cheeseProgress))}
-                    fill="#F5CE6C"
-                  />
-                </g>
-              )}
+              {/* 4. Cheese Stretch Strands (Phase 3: 2.1s - 3.2s) - GPU motion animation */}
+              <motion.g
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 0, 0.95, 0.9, 0, 0],
+                }}
+                transition={{
+                  duration: 5.1,
+                  times: [0, 0.41, 0.45, 0.58, 0.64, 1],
+                  ease: 'easeInOut',
+                }}
+              >
+                {/* Center Apex Stretch */}
+                <path
+                  d="M 200 200 Q 215 195 232 172"
+                  fill="none"
+                  stroke="#F5CE6C"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                  style={{ filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.5))' }}
+                />
+                {/* Left Edge Stretch 1 */}
+                <path
+                  d="M 218 132 Q 232 125 248 110"
+                  fill="none"
+                  stroke="#FFF2C6"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                />
+                {/* Right Edge Stretch 2 */}
+                <path
+                  d="M 268 182 Q 282 175 296 160"
+                  fill="none"
+                  stroke="#E5A93C"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                {/* Fine Molten Droplet */}
+                <circle
+                  cx="216"
+                  cy="188"
+                  r="1.8"
+                  fill="#F5CE6C"
+                />
+              </motion.g>
 
               {/* 5. Subtle Warm Steam Rising Naturally from the Pizza (Phase 1-4) */}
               <g filter="url(#steam-blur)" opacity="0.45" pointerEvents="none">
@@ -318,27 +306,31 @@ export const IntroPreloader: React.FC<IntroPreloaderProps> = ({ onComplete }) =>
               }}
             >
               {/* Premium Stainless-Steel Cutter Group */}
-              <div className="relative w-20 h-28 flex flex-col items-center">
+              <div className="pizza-cutter relative w-20 h-28 flex flex-col items-center">
                 {/* Ergonomic Dark Charcoal Handle with Champagne Gold Accent */}
-                <div className="w-4 h-16 rounded-full bg-[#181614] border border-[#D8B45A]/50 shadow-md flex flex-col justify-between items-center py-1">
-                  <div className="w-2.5 h-2 rounded-full bg-[#D8B45A]" />
-                  <div className="w-1.5 h-8 rounded-full bg-[#2C2620]" />
-                  <div className="w-2.5 h-1.5 rounded-full bg-[#D8B45A]" />
+                <div 
+                  className="w-4 h-16 rounded-full bg-[#181614] border border-[#D8B45A]/50 shadow-md flex flex-col justify-between items-center py-1"
+                  style={{ borderRadius: '9999px' }}
+                >
+                  <div className="w-2.5 h-2 rounded-full bg-[#D8B45A]" style={{ borderRadius: '9999px' }} />
+                  <div className="w-1.5 h-8 rounded-full bg-[#2C2620]" style={{ borderRadius: '9999px' }} />
+                  <div className="w-2.5 h-1.5 rounded-full bg-[#D8B45A]" style={{ borderRadius: '9999px' }} />
                 </div>
                 
                 {/* Metallic Fork Arm */}
-                <div className="w-3 h-4 bg-gradient-to-b from-[#8E8B85] to-[#D5D3CF] rounded-xs" />
+                <div className="w-3 h-4 bg-gradient-to-b from-[#8E8B85] to-[#D5D3CF] rounded-xs" style={{ borderRadius: '2px' }} />
 
                 {/* Rotating Stainless Wheel Blade */}
                 <motion.div
                   animate={{ rotate: 720 }}
                   transition={{ duration: 1.5, delay: 1.1, ease: 'easeInOut' }}
                   className="w-12 h-12 rounded-full border border-[#D8B45A]/70 shadow-lg bg-gradient-to-tr from-[#9B9790] via-[#E8E6E2] to-[#B0ACA5] flex items-center justify-center"
+                  style={{ borderRadius: '50%' }}
                 >
                   {/* Metallic Glint */}
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center" style={{ borderRadius: '50%' }}>
                     {/* Brass Center Rivet */}
-                    <div className="w-3 h-3 rounded-full bg-[#D8B45A] border border-[#A88945]" />
+                    <div className="w-3 h-3 rounded-full bg-[#D8B45A] border border-[#A88945]" style={{ borderRadius: '50%' }} />
                   </div>
                 </motion.div>
               </div>

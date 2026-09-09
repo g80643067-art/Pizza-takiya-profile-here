@@ -12,23 +12,31 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
   const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          setIsScrolled(scrollY > 20);
 
-      // Detect active section for visual feedback
-      const sections = ['home', 'menu', 'combos', 'about', 'reviews', 'location', 'contact'];
-      const scrollPosition = window.scrollY + 120;
+          const sections = ['home', 'menu', 'combos', 'about', 'reviews', 'location', 'contact'];
+          const scrollPosition = scrollY + 140;
 
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(sectionId);
-            break;
+          for (const sectionId of sections) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+              const top = el.offsetTop;
+              const height = el.offsetHeight;
+              if (scrollPosition >= top && scrollPosition < top + height) {
+                setActiveSection(sectionId);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -152,9 +160,9 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
           </div>
         </div>
 
-        {/* Persistent All-Buttons Navigation Strip - Zero Hidden Buttons, No 3-Dashes */}
-        <div className="bg-[#181613] border-t border-[#D8B45A]/15 px-2 py-1.5 sm:py-2">
-          <div className="max-w-7xl mx-auto flex items-center justify-center flex-wrap gap-1 sm:gap-2">
+        {/* Persistent All-Buttons Navigation Strip - Smooth touch scroll on mobile, centered on larger screens */}
+        <div className="bg-[#181613] border-t border-[#D8B45A]/15 px-2 py-1.5 overflow-hidden w-full">
+          <div className="max-w-7xl mx-auto flex items-center justify-start sm:justify-center overflow-x-auto no-scrollbar flex-nowrap sm:flex-wrap gap-1 sm:gap-2 touch-pan-x">
             {navButtons.map((btn) => {
               const isActive = activeSection === btn.id;
               return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, MessageCircle, MapPin, Share2, ThumbsUp, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Instagram, Facebook, MessageCircle, MapPin, Share2, ArrowUpRight, Sparkles } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/menuData';
 import { getGeneralWhatsAppUrl } from '../utils/whatsapp';
 
@@ -7,11 +7,11 @@ export const SocialSection: React.FC = () => {
   const socialChannels = [
     {
       name: 'Instagram',
-      handle: '@thepizzalovers_patan',
+      handle: '@the_pizza_lovers_',
       description: 'Behind-the-scenes pizza tossing, bubbling mozzarella pulls, customer stories, and latest limited offers.',
       icon: <Instagram className="w-6 h-6 text-[#D8B45A]" />,
       actionText: 'Follow Us on Instagram',
-      href: 'https://instagram.com',
+      href: RESTAURANT_INFO.instagramUrl,
       badge: 'Daily Stories & Reels',
       accentColor: 'border-[#D8B45A]/40',
       bgGradient: 'from-[#D8B45A]/10 to-transparent',
@@ -42,9 +42,9 @@ export const SocialSection: React.FC = () => {
       name: 'Facebook Page',
       handle: 'The Pizza Lover\'s Patan',
       description: 'Connect with our community page, RSVP for local food festivities, and share recommendations with family.',
-      icon: <ThumbsUp className="w-6 h-6 text-[#D8B45A]" />,
+      icon: <Facebook className="w-6 h-6 text-[#D8B45A]" />,
       actionText: 'Visit Facebook Page',
-      href: 'https://facebook.com',
+      href: RESTAURANT_INFO.facebookUrl,
       badge: 'Community & Events',
       accentColor: 'border-[#D8B45A]/40',
       bgGradient: 'from-[#D8B45A]/10 to-transparent',
@@ -136,10 +136,10 @@ export const SocialSection: React.FC = () => {
             </p>
           </div>
           <a
-            href="https://instagram.com"
+            href={RESTAURANT_INFO.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#D8B45A] hover:bg-[#C9A44B] text-[#141311] font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-95"
+            className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#D8B45A] hover:bg-[#C9A44B] text-[#141311] font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-95 cursor-pointer"
           >
             <Instagram className="w-3.5 h-3.5 text-[#141311]" />
             <span>Tag On Stories</span>

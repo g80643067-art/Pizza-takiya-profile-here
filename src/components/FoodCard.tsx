@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { MessageCircle, Plus, Check, Sparkles, Layers } from 'lucide-react';
+import { ShoppingBag, Plus, Check, Sparkles, Layers } from 'lucide-react';
 import { MenuItem } from '../types';
 import { ADDON_PRICES } from '../data/menuData';
-import { getSingleItemWhatsAppUrl } from '../utils/whatsapp';
 import { VegBadge } from './VegBadge';
 
 interface FoodCardProps {
@@ -14,9 +13,16 @@ interface FoodCardProps {
     extraTopping?: boolean, 
     price?: number
   ) => void;
+  onOrderNow?: (
+    item: MenuItem, 
+    size?: 'Small' | 'Medium' | 'Large', 
+    extraCheese?: boolean, 
+    extraTopping?: boolean, 
+    price?: number
+  ) => void;
 }
 
-export const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
+const FoodCardComponent: React.FC<FoodCardProps> = ({ item, onAddToCart, onOrderNow }) => {
   const hasSizes = Boolean(item.sizes && item.sizes.length > 0);
   const [selectedSize, setSelectedSize] = useState<'Small' | 'Medium' | 'Large'>('Small');
   const [extraCheese, setExtraCheese] = useState(false);
@@ -53,13 +59,19 @@ export const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
     setTimeout(() => setJustAdded(false), 1400);
   };
 
-  const whatsappUrl = getSingleItemWhatsAppUrl(
-    item,
-    hasSizes ? selectedSize : undefined,
-    extraCheese,
-    extraTopping,
-    currentPrice
-  );
+  const handleOrder = () => {
+    if (onOrderNow) {
+      onOrderNow(
+        item,
+        hasSizes ? selectedSize : undefined,
+        extraCheese,
+        extraTopping,
+        currentPrice
+      );
+    } else {
+      handleAdd();
+    }
+  };
 
   return (
     <div className="flex flex-col bg-[#1C1916] rounded-3xl overflow-hidden border border-[#D8B45A]/20 shadow-xl hover:shadow-[0_12px_28px_rgba(0,0,0,0.6)] hover:border-[#D8B45A]/50 transition-all duration-300 group">
@@ -71,6 +83,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           referrerPolicy="no-referrer"
           loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
@@ -175,34 +188,37 @@ export const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
 
         {/* Action Buttons - Clearly Fitted */}
         <div className="pt-2 flex items-center gap-2">
-          {/* Direct WhatsApp Order Pill */}
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          {/* Order in Tray Pill */}
+          <button
+            type="button"
+            onClick={handleOrder}
             className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 border border-[#D8B45A]/40 text-[#D8B45A] hover:bg-[#D8B45A] hover:text-[#141311] hover:shadow-[0_0_15px_rgba(216,180,90,0.25)] rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap"
-            title="Order directly on WhatsApp"
+            title="Configure and order in Order Tray"
           >
-            <MessageCircle className="w-3.5 h-3.5 text-current shrink-0" />
+            <ShoppingBag className="w-3.5 h-3.5 text-current shrink-0" />
             <span>Order</span>
-          </a>
+          </button>
 
           {/* Add to Multi-item Order Tray */}
           <button
             type="button"
             onClick={handleAdd}
-            className="inline-flex items-center justify-center gap-1 py-2 px-3 rounded-full border border-[#D8B45A]/35 bg-[#141311] hover:bg-[#D8B45A] text-[#D8B45A] hover:text-[#141311] transition-all active:scale-95 shadow-xs cursor-pointer text-[10px] sm:text-[11px] font-bold uppercase tracking-wider whitespace-nowrap"
+            className={`inline-flex items-center justify-center gap-1.5 py-2 px-3 sm:px-3.5 rounded-full border transition-all active:scale-95 shadow-xs cursor-pointer text-[10px] sm:text-[11px] font-bold uppercase tracking-wider whitespace-nowrap ${
+              justAdded
+                ? 'bg-emerald-500 text-[#141311] border-emerald-500'
+                : 'border-[#D8B45A]/40 bg-[#141311] hover:bg-[#D8B45A] text-[#D8B45A] hover:text-[#141311]'
+            }`}
             title="Add to order tray"
           >
             {justAdded ? (
               <>
-                <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span className="text-emerald-400">Added</span>
+                <Check className="w-3.5 h-3.5 text-[#141311] shrink-0 stroke-[3]" />
+                <span>Added</span>
               </>
             ) : (
               <>
                 <Plus className="w-3.5 h-3.5 shrink-0" />
-                <span>Add</span>
+                <span>ADD TO CART</span>
               </>
             )}
           </button>
@@ -211,3 +227,5 @@ export const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
     </div>
   );
 };
+
+export const FoodCard = React.memo(FoodCardComponent);

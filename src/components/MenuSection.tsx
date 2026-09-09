@@ -12,9 +12,16 @@ interface MenuSectionProps {
     extraTopping?: boolean, 
     price?: number
   ) => void;
+  onOrderNow?: (
+    item: MenuItem, 
+    size?: 'Small' | 'Medium' | 'Large', 
+    extraCheese?: boolean, 
+    extraTopping?: boolean, 
+    price?: number
+  ) => void;
 }
 
-export const MenuSection: React.FC<MenuSectionProps> = ({ onAddToCart }) => {
+export const MenuSection: React.FC<MenuSectionProps> = ({ onAddToCart, onOrderNow }) => {
   const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -89,23 +96,25 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ onAddToCart }) => {
           </div>
         </div>
 
-        {/* Category Navigation Pills - Clear, Fitted & Never Hidden */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-8">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              id={`category-btn-${cat.id}`}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-3.5 sm:px-4.5 py-2 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
-                activeCategory === cat.id
-                  ? 'bg-[#D8B45A] text-[#141311] font-black shadow-[0_0_15px_rgba(216,180,90,0.35)] scale-[1.02]'
-                  : 'bg-[#1C1916] hover:bg-[#25211D] text-[#F4EBDD]/75 hover:text-[#D8B45A] border border-[#D8B45A]/25'
-              }`}
-            >
-              <span>{cat.icon}</span>
-              <span>{cat.name}</span>
-            </button>
-          ))}
+        {/* Category Navigation - ONE horizontal scrollable row with smooth touch/swipe scrolling */}
+        <div className="w-full max-w-full overflow-hidden mb-8">
+          <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto no-scrollbar flex-nowrap scroll-smooth py-1 px-1 touch-pan-x">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                id={`category-btn-${cat.id}`}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`whitespace-nowrap shrink-0 px-3.5 sm:px-4.5 py-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+                  activeCategory === cat.id
+                    ? 'bg-[#D8B45A] text-[#141311] font-black shadow-[0_0_15px_rgba(216,180,90,0.35)] scale-[1.02]'
+                    : 'bg-[#1C1916] hover:bg-[#25211D] text-[#F4EBDD]/75 hover:text-[#D8B45A] border border-[#D8B45A]/25'
+                }`}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Menu Items Count & Reset Filter */}
@@ -124,11 +133,16 @@ export const MenuSection: React.FC<MenuSectionProps> = ({ onAddToCart }) => {
           )}
         </div>
 
-        {/* Food Items Display in Grid */}
+        {/* Food Items Display in Grid - Naturally wraps to next row as width fills */}
         {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
             {filteredItems.map((item) => (
-              <FoodCard key={item.id} item={item} onAddToCart={onAddToCart} />
+              <FoodCard
+                key={item.id}
+                item={item}
+                onAddToCart={onAddToCart}
+                onOrderNow={onOrderNow}
+              />
             ))}
           </div>
         ) : (

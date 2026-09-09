@@ -4,7 +4,7 @@ import { getGeneralWhatsAppUrl, DISPLAY_PHONE } from '../utils/whatsapp';
 
 export const FloatingWhatsApp: React.FC = () => {
   return (
-    <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2">
+    <div className="fixed bottom-5 left-5 z-40 flex flex-col items-start gap-2">
       <a
         id="floating-whatsapp-btn"
         href={getGeneralWhatsAppUrl("Hi The Pizza Lover's! I want to check today's offers and place an order.")}

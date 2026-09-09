@@ -1,53 +1,53 @@
 import { MenuItem, CategoryId } from '../types';
 
 // Realistically generated food photo assets accurately matching menu items
-import comboDoubleImg from '../assets/images/combo_double_1788760149761.jpg';
-import tomatoPizzaImg from '../assets/images/tomato_pizza_1788759921479.jpg';
-import onionPizzaImg from '../assets/images/onion_pizza_1788759937217.jpg';
-import capsicumPizzaImg from '../assets/images/capsicum_pizza_1788759952208.jpg';
-import cornPizzaImg from '../assets/images/corn_pizza_1788759971936.jpg';
-import paneerPizzaImg from '../assets/images/paneer_pizza_1788759992844.jpg';
-import spicyPizzaImg from '../assets/images/spicy_pizza_1788760008730.jpg';
-import vegBurgerImg from '../assets/images/veg_burger_1788760028448.jpg';
-import paneerBurgerImg from '../assets/images/paneer_burger_1788759706673.jpg';
-import cheeseBurgerImg from '../assets/images/cheese_burger_1788759785887.jpg';
-import frenchBurgerImg from '../assets/images/french_burger_1788760129593.jpg';
-import paneerSandwichImg from '../assets/images/paneer_sandwich_1788759722104.jpg';
-import cheeseSandwichImg from '../assets/images/cheese_sandwich_1788759801992.jpg';
-import vegMaggiImg from '../assets/images/veg_maggi_1788759816060.jpg';
-import paneerMaggiImg from '../assets/images/paneer_maggi_1788759676021.jpg';
-import vegMomosImg from '../assets/images/veg_momos_1788759864282.jpg';
-import paneerTikkaImg from '../assets/images/paneer_tikka_1788759834575.jpg';
-import frenchFriesImg from '../assets/images/french_fries_1788760098907.jpg';
-import cheeseFrenchFriesImg from '../assets/images/cheese_french_fries_1788759770036.jpg';
-import alooPattiesImg from '../assets/images/aloo_patties_1788760113689.jpg';
-import cheeseGarlicBreadImg from '../assets/images/cheese_garlic_bread_1788759896886.jpg';
-import stuffedGarlicBreadImg from '../assets/images/stuffed_garlic_bread_1788759643370.jpg';
-import chilliGarlicBreadImg from '../assets/images/chilli_garlic_bread_1788759659943.jpg';
-import zingyParcelImg from '../assets/images/zingy_parcel_1788759752325.jpg';
-import whitePastaImg from '../assets/images/white_pasta_1788760046462.jpg';
-import smokyPaneerPastaImg from '../assets/images/smoky_paneer_pasta_1788759690384.jpg';
-import potatoBitesImg from '../assets/images/potato_bites_1788759737317.jpg';
-import kulhadChaiImg from '../assets/images/kulhad_chai_1788759624780.jpg';
-import hotCoffeeImg from '../assets/images/hot_coffee_1788760080837.jpg';
-import coldCoffeeImg from '../assets/images/cold_coffee_1788760061833.jpg';
-import pizzaCokeComboImg from '../assets/images/real_pizza_coke_1788811139041.jpg';
-import plainCheesePizzaImg from '../assets/images/plain_cheese_pizza_1788763675821.jpg';
-import paneerCheeseOnlyImg from '../assets/images/paneer_cheese_only_1788808084396.jpg';
-import vegSandwichNoCheeseImg from '../assets/images/veg_sandwich_no_cheese_1788808111573.jpg';
-import burgerDrinkComboImg from '../assets/images/burger_drink_combo_1788808157287.jpg';
-import bowlIceCreamImg from '../assets/images/bowl_ice_cream_1788808180594.jpg';
-import loadedCheesePizzaImg from '../assets/images/loaded_cheese_pizza.jpg';
-import pizzaIndianaImg from '../assets/images/pizza_indiana.jpg';
-import freshVeggiePizzaImg from '../assets/images/fresh_veggie_pizza.jpg';
-import crushVeggiePizzaImg from '../assets/images/crush_veggie_pizza.jpg';
-import countryFreshPizzaImg from '../assets/images/country_fresh_pizza.jpg';
-import farmFreshPizzaImg from '../assets/images/farm_fresh_pizza.jpg';
-import darkSpicyPizzaImg from '../assets/images/dark_spicy_pizza.jpg';
-import loversSpecialPizzaImg from '../assets/images/lovers_special_pizza.jpg';
-import nachoCheeseDipImg from '../assets/images/nacho_cheese_dip.jpg';
-import thumsUpCanImg from '../assets/images/thums_up_can.jpg';
-import mountainDewBottleImg from '../assets/images/mountain_dew_bottle.jpg';
+import comboDoubleImg from '../assets/images/combo_double_1788760149761.webp';
+import tomatoPizzaImg from '../assets/images/tomato_pizza_1788759921479.webp';
+import onionPizzaImg from '../assets/images/onion_pizza_1788759937217.webp';
+import capsicumPizzaImg from '../assets/images/capsicum_pizza_1788759952208.webp';
+import cornPizzaImg from '../assets/images/corn_pizza_1788759971936.webp';
+import paneerPizzaImg from '../assets/images/paneer_pizza_1788759992844.webp';
+import spicyPizzaImg from '../assets/images/spicy_pizza_1788760008730.webp';
+import vegBurgerImg from '../assets/images/veg_burger_1788760028448.webp';
+import paneerBurgerImg from '../assets/images/paneer_burger_1788759706673.webp';
+import cheeseBurgerImg from '../assets/images/cheese_burger_1788759785887.webp';
+import frenchBurgerImg from '../assets/images/french_burger_1788760129593.webp';
+import paneerSandwichImg from '../assets/images/paneer_sandwich_1788759722104.webp';
+import cheeseSandwichImg from '../assets/images/cheese_sandwich_1788759801992.webp';
+import vegMaggiImg from '../assets/images/veg_maggi_1788759816060.webp';
+import paneerMaggiImg from '../assets/images/paneer_maggi_1788759676021.webp';
+import vegMomosImg from '../assets/images/veg_momos_1788759864282.webp';
+import paneerTikkaImg from '../assets/images/paneer_tikka_1788759834575.webp';
+import frenchFriesImg from '../assets/images/french_fries_1788760098907.webp';
+import cheeseFrenchFriesImg from '../assets/images/cheese_french_fries_1788759770036.webp';
+import alooPattiesImg from '../assets/images/aloo_patties_1788760113689.webp';
+import cheeseGarlicBreadImg from '../assets/images/cheese_garlic_bread_1788759896886.webp';
+import stuffedGarlicBreadImg from '../assets/images/stuffed_garlic_bread_1788759643370.webp';
+import chilliGarlicBreadImg from '../assets/images/chilli_garlic_bread_1788759659943.webp';
+import zingyParcelImg from '../assets/images/zingy_parcel_1788759752325.webp';
+import whitePastaImg from '../assets/images/white_pasta_1788760046462.webp';
+import smokyPaneerPastaImg from '../assets/images/smoky_paneer_pasta_1788759690384.webp';
+import potatoBitesImg from '../assets/images/potato_bites_1788759737317.webp';
+import kulhadChaiImg from '../assets/images/kulhad_chai_1788759624780.webp';
+import hotCoffeeImg from '../assets/images/hot_coffee_1788760080837.webp';
+import coldCoffeeImg from '../assets/images/cold_coffee_1788760061833.webp';
+import pizzaCokeComboImg from '../assets/images/real_pizza_coke_1788811139041.webp';
+import plainCheesePizzaImg from '../assets/images/plain_cheese_pizza_1788763675821.webp';
+import paneerCheeseOnlyImg from '../assets/images/paneer_cheese_only_1788808084396.webp';
+import vegSandwichNoCheeseImg from '../assets/images/veg_sandwich_no_cheese_1788808111573.webp';
+import burgerDrinkComboImg from '../assets/images/burger_drink_combo_1788808157287.webp';
+import bowlIceCreamImg from '../assets/images/bowl_ice_cream_1788808180594.webp';
+import loadedCheesePizzaImg from '../assets/images/loaded_cheese_pizza.webp';
+import pizzaIndianaImg from '../assets/images/pizza_indiana.webp';
+import freshVeggiePizzaImg from '../assets/images/fresh_veggie_pizza.webp';
+import crushVeggiePizzaImg from '../assets/images/crush_veggie_pizza.webp';
+import countryFreshPizzaImg from '../assets/images/country_fresh_pizza.webp';
+import farmFreshPizzaImg from '../assets/images/farm_fresh_pizza.webp';
+import darkSpicyPizzaImg from '../assets/images/dark_spicy_pizza.webp';
+import loversSpecialPizzaImg from '../assets/images/lovers_special_pizza.webp';
+import nachoCheeseDipImg from '../assets/images/nacho_cheese_dip.webp';
+import thumsUpCanImg from '../assets/images/thums_up_can.webp';
+import mountainDewBottleImg from '../assets/images/mountain_dew_bottle.webp';
 
 export const RESTAURANT_INFO = {
   name: "THE PIZZA LOVER'S",
@@ -62,6 +62,8 @@ export const RESTAURANT_INFO = {
   landmark: "Near Takiya Mela Ground",
   hours: "10:00 AM – 10:00 PM",
   mapsUrl: "https://www.google.com/maps/search/?api=1&query=The+Pizza+Lover%27s+Takiya+Rd+Patan+Takiya+Uttar+Pradesh+209867",
+  instagramUrl: "https://www.instagram.com/the_pizza_lovers_/",
+  facebookUrl: "https://www.facebook.com/The.Pizza.Lovers/",
 };
 
 export const CATEGORIES: { id: CategoryId; name: string; icon: string }[] = [
@@ -209,7 +211,7 @@ export const MENU_ITEMS: MenuItem[] = [
     isPopular: true,
     sizes: LOADED_PIZZA_SIZES,
     hasCustomAddons: true,
-    tag: 'Chef Choice',
+    tag: "Chef's Signature",
     image: loadedCheesePizzaImg,
   },
   {
@@ -224,13 +226,14 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'sp-masala-paneer',
-    name: 'Masala Paneer Pizza',
+    name: 'Tandoori Paneer Pizza',
     category: 'special-pizza',
     description: 'Tender marinated tandoori spiced paneer cubes, roasted capsicum, onion and gooey cheese.',
     price: 135,
     isPopular: true,
     sizes: LOADED_PIZZA_SIZES,
     hasCustomAddons: true,
+    tag: 'Trending',
     image: paneerPizzaImg,
   },
   {
@@ -495,8 +498,9 @@ export const MENU_ITEMS: MenuItem[] = [
     name: 'Stuffed Garlic Bread',
     category: 'pasta-garlic-bread',
     description: 'Freshly baked bread stuffed with sweet corn, jalapeños and rich liquid cheese.',
-    price: 100,
+    price: 69,
     isPopular: true,
+    tag: 'Crispy & Cheesy',
     image: stuffedGarlicBreadImg,
   },
   {
